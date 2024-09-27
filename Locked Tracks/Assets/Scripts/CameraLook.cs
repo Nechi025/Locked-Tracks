@@ -10,6 +10,7 @@ public class CameraLook : MonoBehaviour
 
     float xRotation = 0;
 
+    public bool canMove = true;
 
     void Start()
     {
@@ -19,7 +20,11 @@ public class CameraLook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CameraMove();
+        if (canMove)
+        {
+            CameraMove();
+        }
+        
 
     }
 

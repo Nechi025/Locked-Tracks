@@ -12,10 +12,13 @@ public class GameManager : MonoBehaviour
     private int emptyLocation;
     private int size;
 
+    private Camera _camera;
+
 
 
     void Start()
     {
+        _camera = Camera.main;
         pieces = new List<Transform>();
         size = 3;
         CreateGamePieces(0.01f);
@@ -68,7 +71,9 @@ public class GameManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
             if (hit)
             {
 
