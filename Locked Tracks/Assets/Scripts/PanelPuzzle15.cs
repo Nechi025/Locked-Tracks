@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NumbreGenerator : MonoBehaviour, IInteractable
+public class PanelPuzzle15 : MonoBehaviour, IInteractable
 {
     public GameObject canvas;
     public CameraLook cl;
-    bool isInteracting = false;
+    public bool isInteracting = false;
+    public bool rp = false;
+
 
     public void Interact()
     {
@@ -16,14 +18,15 @@ public class NumbreGenerator : MonoBehaviour, IInteractable
             cl.canMove = false;
             Cursor.lockState = CursorLockMode.None;
             isInteracting = true;
+            rp = true;
         }
-        else
+        /*else
         {
             canvas.SetActive(false);
             cl.canMove = true;
             Cursor.lockState = CursorLockMode.Locked;
             isInteracting = false;
-        }
+        }*/
         
     }
 }

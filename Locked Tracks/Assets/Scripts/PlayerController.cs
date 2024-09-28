@@ -5,13 +5,17 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public CharacterController controller;
+    public CameraLook cam;
 
     [SerializeField] float speed = 10f;
 
     void Update()
     {
-
-        Move();
+        if (cam.canMove == true)
+        {
+            Move();
+        }
+        
 
     }
 
