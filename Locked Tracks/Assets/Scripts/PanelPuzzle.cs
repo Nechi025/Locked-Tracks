@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PanelPuzzle15 : MonoBehaviour, IInteractable
+public class PanelPuzzle : MonoBehaviour, IInteractable
 {
     public GameObject canvas;
     public CameraLook cl;
     public bool isInteracting = false;
-    public bool rp = false;
 
 
     public void Interact()
@@ -18,7 +17,6 @@ public class PanelPuzzle15 : MonoBehaviour, IInteractable
             cl.canMove = false;
             Cursor.lockState = CursorLockMode.None;
             isInteracting = true;
-            rp = true;
         }
         /*else
         {
@@ -27,6 +25,5 @@ public class PanelPuzzle15 : MonoBehaviour, IInteractable
             Cursor.lockState = CursorLockMode.Locked;
             isInteracting = false;
         }*/
-        
     }
 }

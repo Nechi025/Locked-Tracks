@@ -7,6 +7,7 @@ public class GamePiece : MonoBehaviour
     public Vector3 targetPosition;
     private Vector3 correctPosition;
     public int number;
+    public bool inRightPlace;
 
     void Awake()
     {
@@ -22,7 +23,12 @@ public class GamePiece : MonoBehaviour
 
         if (targetPosition == correctPosition)
         {
-            Debug.Log("Ta bien");
+            //Debug.Log("Ta bien");
+            inRightPlace = true;
+        }
+        else
+        {
+            inRightPlace = false;
         }
     }
 }

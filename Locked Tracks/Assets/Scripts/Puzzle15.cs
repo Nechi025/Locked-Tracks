@@ -7,9 +7,13 @@ public class Puzzle15 : MonoBehaviour
     [SerializeField] Transform emptySpace;
     private Camera _camera;
     public GamePiece[] gamePieces;
-    public PanelPuzzle15 gameBoard;
+    public PanelPuzzle gameBoard;
+    public CameraLook cl;
+    public GameObject canvas;
     bool _shuffle = true;
     int emptySpaceIndex = 15;
+    
+    private bool isFinished = false;
 
     private PilaTDA<Movimiento> stackTDA;
 
@@ -63,6 +67,30 @@ public class Puzzle15 : MonoBehaviour
                 }
             }
         }
+
+        if (!isFinished)
+        {
+            int correctPieces = 0;
+            foreach (var a in gamePieces)
+            {
+                if (a != null)
+                {
+                    if (a.inRightPlace)
+                    {
+                        correctPieces++;
+                    }
+                }
+            }
+
+            if (correctPieces == gamePieces.Length - 1)
+            {
+                isFinished = true;
+                canvas.SetActive(false);
+                cl.canMove = true;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+
     }
 
     public void Shuffle()
