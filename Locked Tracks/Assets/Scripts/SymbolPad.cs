@@ -8,6 +8,7 @@ public class SymbolPad : MonoBehaviour
     public CameraLook cl;
     public GameObject canvas;
     bool isFinished = false;
+    [SerializeField] Door _door;
 
     // Update is called once per frame
     void Update()
@@ -29,6 +30,7 @@ public class SymbolPad : MonoBehaviour
                 canvas.SetActive(false);
                 cl.canMove = true;
                 Cursor.lockState = CursorLockMode.Locked;
+                _door.DoorOpen();
             }
         }
         

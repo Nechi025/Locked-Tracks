@@ -34,7 +34,7 @@ public class Keypad : MonoBehaviour
         }
         else
         {
-            answerText.text = "INCORRECT";
+            answerText.text = "";
         }
     }
 

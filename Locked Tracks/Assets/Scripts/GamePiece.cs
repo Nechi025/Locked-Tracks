@@ -19,7 +19,7 @@ public class GamePiece : MonoBehaviour
     void Update()
     {
         //Suavizado de movimiento
-        transform.position = Vector3.Lerp(transform.position, targetPosition, 0.05f);
+        transform.position = Vector3.Lerp(transform.position, targetPosition, 0.1f);
 
         if (targetPosition == correctPosition)
         {

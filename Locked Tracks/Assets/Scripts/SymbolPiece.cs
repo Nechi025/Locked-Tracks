@@ -13,18 +13,6 @@ public class SymbolPiece : MonoBehaviour
     private int answer = 1;
     public Text _text;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ChangeSymbol()
     {
         if (answer == 3)

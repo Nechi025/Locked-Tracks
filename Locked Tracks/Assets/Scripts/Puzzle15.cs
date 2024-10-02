@@ -17,6 +17,8 @@ public class Puzzle15 : MonoBehaviour
 
     private PilaTDA<Movimiento> stackTDA;
 
+    [SerializeField] Door _door;
+
     private void Start()
     {
         _camera = Camera.main;
@@ -43,7 +45,7 @@ public class Puzzle15 : MonoBehaviour
             if (hit)
             {
                 //Si la pieza alcanzada esta al lado del espacio vacio
-                if (Vector3.Distance(emptySpace.position, hit.transform.position) < 0.1)
+                if (Vector3.Distance(emptySpace.position, hit.transform.position) < 0.1f)
                 {
                     //Guardo el movimiento y lo apilo
                     Movimiento movimiento = new Movimiento
@@ -90,6 +92,7 @@ public class Puzzle15 : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
             }
         }
+        else _door.DoorOpen();
 
     }
 
