@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Keypad : MonoBehaviour
 {
     [SerializeField] private Text answerText;
-    private string answer = "121";
+    private string answer = "528";
     private ColaTDA<int> colaNumeros;
     public CameraLook cl;
     public GameObject canvas;
@@ -31,6 +31,7 @@ public class Keypad : MonoBehaviour
             canvas.SetActive(false);
             cl.canMove = true;
             Cursor.lockState = CursorLockMode.Locked;
+            //Win
         }
         else
         {

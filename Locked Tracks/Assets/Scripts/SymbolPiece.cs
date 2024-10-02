@@ -15,19 +15,19 @@ public class SymbolPiece : MonoBehaviour
         {
             answer = 1;
             anim.SetInteger("Number", 1);
-            Debug.Log(anim.Integer("Number"));
+            Debug.Log(anim.GetInteger("Number"));
         }
         else if (answer == 1)
         {  
             answer = 2;
             anim.SetInteger("Number", 2);
-            Debug.Log(anim.Integer("Number"));
+            Debug.Log(anim.GetInteger("Number"));
         }
         else
         {
             answer = 3;
             anim.SetInteger("Number", 3);
-            Debug.Log(anim.Integer("Number"));
+            Debug.Log(anim.GetInteger("Number"));
         }
     }
 
