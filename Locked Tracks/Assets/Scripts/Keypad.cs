@@ -27,15 +27,15 @@ public class Keypad : MonoBehaviour
     {
         if (VerificarClave())
         {
-            answerText.text = "CORRECT";
             canvas.SetActive(false);
             cl.canMove = true;
-            Cursor.lockState = CursorLockMode.Locked;
-            //Win
+            Cursor.lockState = CursorLockMode.None;
+            ChangeScene.instance.LoadSceneByName("Win");
         }
         else
         {
             answerText.text = "";
+            //PlaySound Error
         }
     }
 

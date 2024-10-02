@@ -17,7 +17,8 @@ public class Timer : MonoBehaviour
         else
         {
             remainingTime = 0;
-            //GameOver
+            Cursor.lockState = CursorLockMode.None;
+            ChangeScene.instance.LoadSceneByName("Lose");
         }
 
         

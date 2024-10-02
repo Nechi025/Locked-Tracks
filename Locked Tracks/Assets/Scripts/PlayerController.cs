@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     public CharacterController controller;
     public CameraLook cam;
 
-    [SerializeField] float speed = 10f;
+    [SerializeField] float speed;
 
     void Update()
     {

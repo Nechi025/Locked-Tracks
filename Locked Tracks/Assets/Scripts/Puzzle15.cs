@@ -91,6 +91,14 @@ public class Puzzle15 : MonoBehaviour
                 cl.canMove = true;
                 Cursor.lockState = CursorLockMode.Locked;
             }
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                isFinished = true;
+                canvas.SetActive(false);
+                cl.canMove = true;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
         else _door.DoorOpen();
 
