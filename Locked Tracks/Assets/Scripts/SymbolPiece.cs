@@ -5,33 +5,29 @@ using UnityEngine.UI;
 
 public class SymbolPiece : MonoBehaviour
 {
-    /*public Image symbol;
-    public Image triangle;
-    public Image circle;
-    public Image square;*/
+
     [SerializeField] int correctAnswer;
     private int answer = 1;
-    public Text _text;
-
+    public Animator anim;
     public void ChangeSymbol()
     {
         if (answer == 3)
         {
-            //symbol = triangle;
-            _text.text = "triangle";
             answer = 1;
+            anim.SetInteger("Number", 1);
+            Debug.Log(anim.Integer("Number"));
         }
         else if (answer == 1)
-        {
-            //symbol = circle;
-            _text.text = "circle";
+        {  
             answer = 2;
+            anim.SetInteger("Number", 2);
+            Debug.Log(anim.Integer("Number"));
         }
         else
         {
-            //symbol = square;
-            _text.text = "square";
             answer = 3;
+            anim.SetInteger("Number", 3);
+            Debug.Log(anim.Integer("Number"));
         }
     }
 
