@@ -123,6 +123,108 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &5833899
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -300
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalScale.y
+      value: -300
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalScale.z
+      value: -5331.7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.83
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.00000004371139
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -9.553427e-16
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.000000021855694
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6a2a66dad01b6f24aab4a9a217625bbf, type: 2}
+    - target: {fileID: 919132149155446097, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      propertyPath: m_Name
+      value: Tunel 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5833901}
+  m_SourcePrefab: {fileID: 100100000, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+--- !u!1 &5833900 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 86fd7e684dd3ebf42974098e239712e8, type: 3}
+  m_PrefabInstance: {fileID: 5833899}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5833901
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5833900}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 00c17bc0a7df2fa41985f44d3f0ee02d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6830965
 GameObject:
   m_ObjectHideFlags: 0
@@ -9720,3 +9822,4 @@ SceneRoots:
   - {fileID: 1344472257}
   - {fileID: 1420277267}
   - {fileID: 1333882824}
+  - {fileID: 5833899}
