@@ -10,6 +10,7 @@ public class Keypad : MonoBehaviour
     private ColaTDA<int> colaNumeros;
     public CameraLook cl;
     public GameObject canvas;
+    public QuickSortSolver quickSortSolver; 
 
     private void Start()
     {
@@ -35,7 +36,6 @@ public class Keypad : MonoBehaviour
         else
         {
             answerText.text = "";
-            //PlaySound Error
         }
     }
 
@@ -43,20 +43,24 @@ public class Keypad : MonoBehaviour
     {
         string claveIngresada = "";
 
-        while (!colaNumeros.ColaVacia())  // Recorre los números en la cola
-        {
-            claveIngresada += colaNumeros.Primero().ToString();
-            colaNumeros.Desacolar();  // Desacola cada número
-        }
-
-        return claveIngresada == answer;  // Verifica si la secuencia es igual a la respuesta
-    }
-
-    private void LimpiarCola()
-    {
         while (!colaNumeros.ColaVacia())
         {
+            claveIngresada += colaNumeros.Primero().ToString();
             colaNumeros.Desacolar();
         }
+
+        return claveIngresada == answer;
+    }
+
+    public void AutoSolve()
+    {
+        if (quickSortSolver == null || answerText == null)
+        {
+            Debug.LogError("QuickSortSolver or AnswerText is not assigned!");
+            return;
+        }
+
+        
+        quickSortSolver.Solve(answer, answerText);
     }
 }
