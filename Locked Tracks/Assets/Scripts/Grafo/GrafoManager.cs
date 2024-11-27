@@ -8,6 +8,9 @@ public class GrafoManager : MonoBehaviour
     private Transform bloqueSeleccionado1; // Primer bloque seleccionado
     private Transform bloqueSeleccionado2; // Segundo bloque seleccionado
 
+    public Material materialNormal; // Material para el estado normal
+    public Material materialConectado; // Material para el estado conectado
+
     public CameraLook cl;
 
     public List<Transform> claveDelPuzzle; // Lista con la secuencia correcta
@@ -142,10 +145,18 @@ public class GrafoManager : MonoBehaviour
     public void RegistrarConexion(Transform bloque1, Transform bloque2)
     {
         if (!caminoJugador.Contains(bloque1))
+        {
             caminoJugador.Add(bloque1);
+            ResaltarBloque(bloque1);
+        }
+            
 
         if (!caminoJugador.Contains(bloque2))
+        {
             caminoJugador.Add(bloque2);
+            ResaltarBloque(bloque2);
+        }
+            
 
         // Opcional: Dibujar línea o feedback visual
         Debug.DrawLine(bloque1.position, bloque2.position, Color.green, 2f);
@@ -164,10 +175,18 @@ public class GrafoManager : MonoBehaviour
 
                 // Elimina los bloques del camino del jugador si no están conectados a otros
                 if (!TieneOtrasConexiones(bloque1))
+                {
                     caminoJugador.Remove(bloque1);
+                    RestablecerMaterial(bloque1);
+                }
+                    
 
                 if (!TieneOtrasConexiones(bloque2))
+                {
                     caminoJugador.Remove(bloque2);
+                    RestablecerMaterial(bloque2);
+                }
+                    
 
                 // Feedback visual opcional
                 Debug.DrawLine(bloque1.position, bloque2.position, Color.red, 2f);
@@ -183,5 +202,23 @@ public class GrafoManager : MonoBehaviour
     private bool TieneOtrasConexiones(Transform bloque)
     {
         return grafo.ObtenerAdyacentes(bloque).Count > 0;
+    }
+
+    private void ResaltarBloque(Transform bloque)
+    {
+        var renderer = bloque.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            materialNormal = renderer.material;
+            renderer.material = materialConectado;
+        }
+    }
+    private void RestablecerMaterial(Transform bloque)
+    {
+        var renderer = bloque.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            renderer.material = materialNormal;
+        }
     }
 }
