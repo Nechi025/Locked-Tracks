@@ -26,21 +26,19 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        //scoreManager = FindObjectOfType<ScoreManager>();
         tiempoInicio = Time.time; // Registra el inicio del tiempo de la partida
 
-        // Asegúrate de que el panel de resultados esté oculto al iniciar
         resultsPanel.SetActive(false);
     }
 
     void Update()
     {
-        // Finaliza la partida al presionar la barra espaciadora
+        /*
         if (Input.GetKeyDown(KeyCode.Space))
         {
             TerminarPartida();
             Debug.Log("Terminado");
-        }
+        }*/
     }
     public int CalcularTiempoFinal()
     {
@@ -60,12 +58,11 @@ public class GameManager : MonoBehaviour
         int highscore = scoreManager.ObtenerHighscore();
 
         // Mostrar resultados en el panel
-        resultsPanel.SetActive(true); // Activa el panel de resultados
-        //ResultsManager resultsManager = resultsPanel.GetComponent<ResultsManager>();
+        resultsPanel.SetActive(true);
         resultsManager.MostrarResultados(tiempoFinal, highscore);
 
         // Detener el tiempo de juego
-        Time.timeScale = 0; // Pausa el juego
+        Time.timeScale = 0;
     }
 
     private string FormatearTiempo(int tiempoEnSegundos)
@@ -78,6 +75,5 @@ public class GameManager : MonoBehaviour
     public void ReiniciarJuego()
     {
         Time.timeScale = 1; // Restaura el tiempo del juego
-        //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }

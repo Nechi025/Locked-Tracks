@@ -11,4 +11,5 @@ public interface GrafoTDA<T>
     void EliminarArista(T v1, T v2);
     bool ExisteArista(T v1, T v2);
     int PesoArista(T v1, T v2);
+    public List<(T, int)> ObtenerAdyacentes(T vertice);
 }

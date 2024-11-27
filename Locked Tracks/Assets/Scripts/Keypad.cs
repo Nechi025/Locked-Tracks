@@ -31,7 +31,7 @@ public class Keypad : MonoBehaviour
             canvas.SetActive(false);
             cl.canMove = true;
             Cursor.lockState = CursorLockMode.None;
-            ChangeScene.instance.LoadSceneByName("Win");
+            ChangeScene.instance.LoadSceneByName("Level2Scene");
         }
         else
         {

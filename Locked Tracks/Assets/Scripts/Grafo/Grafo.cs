@@ -46,7 +46,7 @@ public class Grafo : MonoBehaviour, GrafoTDA<Transform>
         if (vertices.Contains(bloque1) && vertices.Contains(bloque2))
         {
             adjacencias[bloque1].Add((bloque2, peso));
-            adjacencias[bloque2].Add((bloque1, peso)); // Si es no dirigido
+            adjacencias[bloque2].Add((bloque1, peso));
         }
     }
 
@@ -83,21 +83,13 @@ public class Grafo : MonoBehaviour, GrafoTDA<Transform>
         }
         return -1; // Si no existe la arista, retorna -1
     }
-    private void OnDrawGizmos()
+
+    public List<(Transform, int)> ObtenerAdyacentes(Transform vertice)
     {
-        if (adjacencias == null) return;
-
-        Gizmos.color = Color.green;
-
-        // Dibujar todas las conexiones en el grafo
-        foreach (var vertice in adjacencias.Keys)
+        if (adjacencias.ContainsKey(vertice))
         {
-            foreach (var (vecino, _) in adjacencias[vertice])
-            {
-                // Línea desde el vértice actual hacia el vecino
-                Gizmos.DrawLine(vertice.position, vecino.position);
-            }
+            return adjacencias[vertice];
         }
+        return new List<(Transform, int)>();
     }
-
 }

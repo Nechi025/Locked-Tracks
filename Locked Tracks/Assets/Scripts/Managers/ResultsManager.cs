@@ -6,8 +6,8 @@ using TMPro;
 
 public class ResultsManager : MonoBehaviour
 {
-    public TMP_Text highscoreText;    // Referencia al texto del highscore
-    public TMP_Text currentScoreText; // Referencia al texto del puntaje actual
+    public TMP_Text highscoreText; 
+    public TMP_Text currentScoreText; 
 
     public void MostrarResultados(int puntajeFinal, int highscore)
     {

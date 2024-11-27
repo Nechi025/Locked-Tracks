@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public Text tiempoText; // Texto para mostrar el tiempo durante la partida
+    public Text tiempoText;
     private GameManager gameManager;
 
     void Start()
