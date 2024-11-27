@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 public class Keypad : MonoBehaviour
 {
-    [SerializeField] private Text answerText;
+    [SerializeField] private Text answerText; 
     private string answer = "528";
-    private ColaTDA<int> colaNumeros;
-    public CameraLook cl;
-    public GameObject canvas;
+    private ColaTDA<int> colaNumeros; 
+    public CameraLook cl; 
+    public GameObject canvas; 
     public QuickSortSolver quickSortSolver; 
 
     private void Start()
@@ -31,12 +31,12 @@ public class Keypad : MonoBehaviour
             canvas.SetActive(false);
             cl.canMove = true;
             Cursor.lockState = CursorLockMode.None;
-            GameManager.instance.TerminarPartida();
-            //ChangeScene.instance.LoadSceneByName("Win");
+            ChangeScene.instance.LoadSceneByName("Win");
         }
         else
         {
             answerText.text = "";
+            Debug.Log("Incorrect code entered!");
         }
     }
 
@@ -55,13 +55,29 @@ public class Keypad : MonoBehaviour
 
     public void AutoSolve()
     {
-        if (quickSortSolver == null || answerText == null)
+        if (quickSortSolver == null)
         {
-            Debug.LogError("QuickSortSolver or AnswerText is not assigned!");
+            Debug.LogError("Quicksort Falta");
             return;
         }
 
-        
-        quickSortSolver.Solve(answer, answerText);
+     
+        string solvedAnswer = quickSortSolver.Solve(answer);
+
+       
+        while (!colaNumeros.ColaVacia())
+        {
+            colaNumeros.Desacolar();
+        }
+
+      
+        foreach (char digit in solvedAnswer)
+        {
+            colaNumeros.Acolar(int.Parse(digit.ToString()));
+        }
+
+        answerText.text = solvedAnswer;
+
+        Debug.Log($"Codigo: {solvedAnswer}");
     }
 }

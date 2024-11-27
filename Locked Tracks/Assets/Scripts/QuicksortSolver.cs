@@ -5,36 +5,33 @@ using UnityEngine.UI;
 
 public class QuickSortSolver : MonoBehaviour
 {
-    public void Solve(string targetAnswer, Text outputText)
+    public string Solve(string targetAnswer)
     {
-       
+      
         List<string> permutations = GeneratePermutations(3);
+
 
         QuickSort(permutations, 0, permutations.Count - 1);
 
-       
         foreach (string perm in permutations)
         {
             if (perm == targetAnswer)
             {
-                
-                outputText.text = perm;
-                return;
+                return perm;
             }
         }
 
+        Debug.LogError("Sin Solucion");
+        return "";
     }
 
     private List<string> GeneratePermutations(int length)
     {
         List<string> permutations = new List<string>();
 
-        
         for (int i = 0; i < 1000; i++)
         {
-            
-            string number = i.ToString("000");
-            permutations.Add(number);
+            permutations.Add(i.ToString("D" + length));
         }
 
         return permutations;
@@ -57,7 +54,7 @@ public class QuickSortSolver : MonoBehaviour
 
         for (int j = low; j < high; j++)
         {
-            if (string.Compare(list[j], pivot) < 0) 
+            if (string.Compare(list[j], pivot) < 0)
             {
                 i++;
                 Swap(list, i, j);
@@ -75,3 +72,4 @@ public class QuickSortSolver : MonoBehaviour
         list[j] = temp;
     }
 }
+
