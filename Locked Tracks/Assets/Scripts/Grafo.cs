@@ -2,80 +2,80 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grafo<T> : MonoBehaviour, GrafoTDA<T>
+public class Grafo : MonoBehaviour, GrafoTDA<Transform>
 {
-    private Dictionary<T, List<(T, int)>> adjacencias; // Diccionario de adyacencias
-    private List<T> vertices; // Lista de vértices
+    private Dictionary<Transform, List<(Transform, int)>> adjacencias; // Diccionario de adyacencias
+    private List<Transform> vertices; // Lista de vértices
 
     // Inicializar el grafo
     public void InicializarGrafo()
     {
-        adjacencias = new Dictionary<T, List<(T, int)>>(); // Almacena las aristas
-        vertices = new List<T>(); // Lista de vértices
+        adjacencias = new Dictionary<Transform, List<(Transform, int)>>(); // Almacena las aristas
+        vertices = new List<Transform>(); // Lista de vértices
     }
 
     // Agregar un vértice al grafo (sin duplicados)
-    public void AgregarVertice(T v)
+    public void AgregarVertice(Transform bloque)
     {
-        if (!vertices.Contains(v)) // Verifica si el vértice ya está en la lista
+        if (!vertices.Contains(bloque)) // Verifica si el vértice ya está en la lista
         {
-            vertices.Add(v); // Si no está, lo agrega
-            adjacencias[v] = new List<(T, int)>(); // Inicializa la lista de adyacencias para el vértice
+            vertices.Add(bloque); // Si no está, lo agrega
+            adjacencias[bloque] = new List<(Transform, int)>(); // Inicializa la lista de adyacencias para el vértice
         }
     }
 
     // Eliminar un vértice y sus aristas
-    public void EliminarVertice(T v)
+    public void EliminarVertice(Transform bloque)
     {
-        if (vertices.Contains(v))
+        if (vertices.Contains(bloque))
         {
-            vertices.Remove(v);
-            adjacencias.Remove(v); // Eliminar las aristas relacionadas con este vértice
+            vertices.Remove(bloque);
+            adjacencias.Remove(bloque); // Eliminar las aristas relacionadas con este vértice
 
             // Eliminar las aristas hacia el vértice desde otros vértices
             foreach (var vertice in adjacencias)
             {
-                vertice.Value.RemoveAll(arista => arista.Item1.Equals(v));
+                vertice.Value.RemoveAll(arista => arista.Item1 == bloque);
             }
         }
     }
 
     // Agregar una arista con peso entre dos vértices
-    public void AgregarArista(T id, T v1, T v2, int peso)
+    public void AgregarArista(Transform bloque1, Transform bloque2, int peso)
     {
-        if (vertices.Contains(v1) && vertices.Contains(v2))
+        if (vertices.Contains(bloque1) && vertices.Contains(bloque2))
         {
-            adjacencias[v1].Add((v2, peso));
-            adjacencias[v2].Add((v1, peso)); // Si es no dirigido
+            adjacencias[bloque1].Add((bloque2, peso));
+            adjacencias[bloque2].Add((bloque1, peso)); // Si es no dirigido
         }
     }
 
     // Eliminar una arista entre dos vértices
-    public void EliminarArista(T v1, T v2)
+    public void EliminarArista(Transform bloque1, Transform bloque2)
     {
-        if (adjacencias.ContainsKey(v1))
+        if (adjacencias.ContainsKey(bloque1))
         {
-            adjacencias[v1].RemoveAll(arista => arista.Item1.Equals(v2));
+            adjacencias[bloque1].RemoveAll(arista => arista.Item1 == bloque2);
         }
 
-        if (adjacencias.ContainsKey(v2))
+        if (adjacencias.ContainsKey(bloque2))
         {
-            adjacencias[v2].RemoveAll(arista => arista.Item1.Equals(v1));
+            adjacencias[bloque2].RemoveAll(arista => arista.Item1 == bloque1);
         }
     }
 
     // Verificar si existe una arista entre dos vértices
-    public bool ExisteArista(T v1, T v2)
+    public bool ExisteArista(Transform bloque1, Transform bloque2)
     {
-        return adjacencias.ContainsKey(v1) && adjacencias[v1].Exists(arista => arista.Item1.Equals(v2));
+        return adjacencias.ContainsKey(bloque1) && adjacencias[bloque1].Exists(arista => arista.Item1 == bloque2);
     }
 
     // Obtener el peso de una arista entre dos vértices
-    public int PesoArista(T v1, T v2)
+    public int PesoArista(Transform bloque1, Transform bloque2)
     {
-        if (adjacencias.ContainsKey(v1))
+        if (adjacencias.ContainsKey(bloque1))
         {
-            var arista = adjacencias[v1].Find(ar => ar.Item1.Equals(v2));
+            var arista = adjacencias[bloque1].Find(ar => ar.Item1 == bloque2);
             if (!arista.Equals(default))
             {
                 return arista.Item2; // Retorna el peso de la arista
@@ -83,4 +83,21 @@ public class Grafo<T> : MonoBehaviour, GrafoTDA<T>
         }
         return -1; // Si no existe la arista, retorna -1
     }
+    private void OnDrawGizmos()
+    {
+        if (adjacencias == null) return;
+
+        Gizmos.color = Color.green;
+
+        // Dibujar todas las conexiones en el grafo
+        foreach (var vertice in adjacencias.Keys)
+        {
+            foreach (var (vecino, _) in adjacencias[vertice])
+            {
+                // Línea desde el vértice actual hacia el vecino
+                Gizmos.DrawLine(vertice.position, vecino.position);
+            }
+        }
+    }
+
 }
