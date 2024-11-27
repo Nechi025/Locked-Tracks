@@ -31,7 +31,8 @@ public class Keypad : MonoBehaviour
             canvas.SetActive(false);
             cl.canMove = true;
             Cursor.lockState = CursorLockMode.None;
-            ChangeScene.instance.LoadSceneByName("Win");
+            GameManager.instance.TerminarPartida();
+            //ChangeScene.instance.LoadSceneByName("Win");
         }
         else
         {
