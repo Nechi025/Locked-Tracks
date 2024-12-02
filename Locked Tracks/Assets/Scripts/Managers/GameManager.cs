@@ -57,9 +57,12 @@ public class GameManager : MonoBehaviour
         // Obtener el highscore actualizado
         int highscore = scoreManager.ObtenerHighscore();
 
+        // Obtener los tres mejores puntajes
+        List<string> topTres = scoreManager.ObtenerTopHighScoreFormateado();
+
         // Mostrar resultados en el panel
         resultsPanel.SetActive(true);
-        resultsManager.MostrarResultados(tiempoFinal, highscore);
+        resultsManager.MostrarResultados(tiempoFinal, highscore, topTres);
 
         // Detener el tiempo de juego
         Time.timeScale = 0;

@@ -53,6 +53,19 @@ public class ScoreManager : MonoBehaviour
         return PlayerPrefs.GetInt("Highscore", int.MaxValue);
     }
 
+    public List<string> ObtenerTopHighScoreFormateado()
+    {
+        List<int> topTres = arbolPuntajes.TopHighScore();
+        List<string> topHighScoreFormateado = new List<string>();
+
+        foreach (int puntaje in topTres)
+        {
+            topHighScoreFormateado.Add(FormatearTiempo(puntaje));
+        }
+
+        return topHighScoreFormateado;
+    }
+
     private string FormatearTiempo(int tiempoEnSegundos)
     {
         int minutos = tiempoEnSegundos / 60;
