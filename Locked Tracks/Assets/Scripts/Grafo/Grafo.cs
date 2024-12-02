@@ -92,4 +92,9 @@ public class Grafo : MonoBehaviour, GrafoTDA<Transform>
         }
         return new List<(Transform, int)>();
     }
+
+    public List<Transform> ObtenerVertices()
+    {
+        return new List<Transform>(adjacencias.Keys);
+    }
 }
