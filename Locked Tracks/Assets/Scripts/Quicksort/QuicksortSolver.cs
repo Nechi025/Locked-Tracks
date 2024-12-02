@@ -1,42 +1,72 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class QuickSortSolver : MonoBehaviour
 {
-    public string Solve(string targetAnswer)
+    // Public method to generate hints
+    public List<string> GenerateHints(List<string> passwords)
     {
-      
-        List<string> permutations = GeneratePermutations(3);
+        List<string> sortedPasswords = new List<string>();
 
-
-        QuickSort(permutations, 0, permutations.Count - 1);
-
-        foreach (string perm in permutations)
+        // Sort each password's digits and add to the list
+        foreach (string password in passwords)
         {
-            if (perm == targetAnswer)
+            string sortedPassword = SortDigits(password);
+            sortedPasswords.Add(sortedPassword);
+        }
+
+        // Sort the entire list of sorted passwords
+        QuickSort(sortedPasswords, 0, sortedPasswords.Count - 1);
+
+        return sortedPasswords;
+    }
+
+    // Helper to sort digits in a string
+    private string SortDigits(string input)
+    {
+        char[] digits = input.ToCharArray();
+        QuickSort(digits, 0, digits.Length - 1);
+        return new string(digits);
+    }
+
+    // QuickSort for char arrays
+    private void QuickSort(char[] array, int low, int high)
+    {
+        if (low < high)
+        {
+            int pivotIndex = Partition(array, low, high);
+            QuickSort(array, low, pivotIndex - 1);
+            QuickSort(array, pivotIndex + 1, high);
+        }
+    }
+
+    private int Partition(char[] array, int low, int high)
+    {
+        char pivot = array[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++)
+        {
+            if (array[j] < pivot)
             {
-                return perm;
+                i++;
+                Swap(array, i, j);
             }
         }
 
-        Debug.LogError("Sin Solucion");
-        return "";
+        Swap(array, i + 1, high);
+        return i + 1;
     }
 
-    private List<string> GeneratePermutations(int length)
+    private void Swap(char[] array, int i, int j)
     {
-        List<string> permutations = new List<string>();
-
-        for (int i = 0; i < 1000; i++)
-        {
-            permutations.Add(i.ToString("D" + length));
-        }
-
-        return permutations;
+        char temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 
+    // QuickSort for List<string>
     private void QuickSort(List<string> list, int low, int high)
     {
         if (low < high)
@@ -72,4 +102,5 @@ public class QuickSortSolver : MonoBehaviour
         list[j] = temp;
     }
 }
+
 
