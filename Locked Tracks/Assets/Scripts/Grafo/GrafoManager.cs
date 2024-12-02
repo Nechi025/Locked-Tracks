@@ -5,8 +5,12 @@ using UnityEngine;
 public class GrafoManager : MonoBehaviour
 {
     private GrafoTDA<Transform> grafo; // Referencia al grafo
-    private Transform bloqueSeleccionado1; // Primer bloque seleccionado
-    private Transform bloqueSeleccionado2; // Segundo bloque seleccionado
+    private Transform bloqueSeleccionado1; // Inicio
+    private Transform bloqueSeleccionado2; // Final
+    public float distanciaConexion = 0.5f;
+    public LayerMask capaBloques;
+
+    private Dijkstra<Transform> dijkstra;
 
     public Material materialNormal; // Material para el estado normal
     public Material materialConectado; // Material para el estado conectado
@@ -29,6 +33,9 @@ public class GrafoManager : MonoBehaviour
         {
             grafo.AgregarVertice(bloque.transform);
         }
+        ConectarVertices();
+
+        dijkstra = new Dijkstra<Transform>();
     }
 
     void Update()
@@ -40,6 +47,14 @@ public class GrafoManager : MonoBehaviour
             {
                 DetectarBloque();
                 conectando = true;
+            }
+            foreach (var vertice in grafo.ObtenerVertices())
+            {
+                Debug.Log($"Bloque: {vertice}");
+                foreach (var (vecino, peso) in grafo.ObtenerAdyacentes(vertice))
+                {
+                    Debug.Log($" -> Conectado a: {vecino} con peso: {peso}");
+                }
             }
         }
         else if (Input.GetMouseButtonDown(1)) // Botón derecho para desconectar
@@ -56,8 +71,31 @@ public class GrafoManager : MonoBehaviour
             ValidarSolucion(caminoJugador);
         }
 
+        if (Input.GetKeyDown(KeyCode.Space)) // Presionar espacio para calcular la ruta
+        {
+            if (bloqueSeleccionado1 != null && bloqueSeleccionado2 != null)
+            {
+                List<Transform> ruta = dijkstra.CalcularRuta(grafo, bloqueSeleccionado1, bloqueSeleccionado2);
+
+                if (ruta != null)
+                {
+                    Debug.Log("Ruta encontrada:");
+                    foreach (var bloque in ruta)
+                    {
+                        Debug.Log(bloque.name);
+                        ResaltarBloque(bloque);
+                    }
+                    ResetSeleccion();
+                }
+                else
+                {
+                    Debug.LogWarning("No se encontró una ruta.");
+                }
+            }
+        }
+
         // Si se seleccionaron dos bloques, conectarlos
-        if (bloqueSeleccionado1 != null && bloqueSeleccionado2 != null && conectando == true)
+        /*if (bloqueSeleccionado1 != null && bloqueSeleccionado2 != null && conectando == true)
         {
             CrearConexion();
             ResetSeleccion();
@@ -69,7 +107,7 @@ public class GrafoManager : MonoBehaviour
             DesconectarVertices(bloqueSeleccionado1, bloqueSeleccionado2);
             ResetSeleccion();
             desconectando = false;
-        }
+        }*/
     }
 
     // Detectar qué bloque seleccionó el jugador
@@ -88,10 +126,34 @@ public class GrafoManager : MonoBehaviour
                 if (bloqueSeleccionado1 == null)
                 {
                     bloqueSeleccionado1 = bloque;
+                    ResaltarBloque(bloqueSeleccionado1);
                 }
                 else if (bloqueSeleccionado2 == null && bloque != bloqueSeleccionado1)
                 {
                     bloqueSeleccionado2 = bloque;
+                    ResaltarBloque(bloqueSeleccionado2);
+                }
+            }
+        }
+    }
+
+    private void ConectarVertices()
+    {
+        Collider[] bloques = Physics.OverlapSphere(transform.position, Mathf.Infinity, capaBloques);
+
+        // Conectar bloques adyacentes
+        foreach (var bloque in bloques)
+        {
+            foreach (var vecino in bloques)
+            {
+                if (bloque != vecino)
+                {
+                    int distancia = CalcularPeso(bloque.transform.position, vecino.transform.position);
+                    if (distancia <= distanciaConexion)
+                    {
+                        grafo.AgregarArista(bloque.transform, vecino.transform, distancia);
+                        Debug.Log("Se agrego arista");
+                    }
                 }
             }
         }
