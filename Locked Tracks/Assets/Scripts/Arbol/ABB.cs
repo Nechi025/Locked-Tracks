@@ -137,28 +137,28 @@ public class ABB : MonoBehaviour, ArbolTDA
 
     public List<int> TopHighScore()
     {
-        List<int> mayores = new List<int>();
-        TopHighScoreRecursivo(raiz, mayores);
-        return mayores;
+        List<int> menores = new List<int>();
+        TopHighScoreRecursivo(raiz, menores);
+        return menores;
     }
 
-    private void TopHighScoreRecursivo(NodoABB nodo, List<int> mayores)
+    private void TopHighScoreRecursivo(NodoABB nodo, List<int> menores)
     {
-        if (nodo == null || mayores.Count >= 3)
+        if (nodo == null || menores.Count >= 3)
         {
             return;
         }
 
         // Recorre primero el hijo derecho (mayores valores)
-        TopHighScoreRecursivo(nodo.hijoDer, mayores);
+        TopHighScoreRecursivo(nodo.hijoIzq, menores);
 
         // Añade el valor actual si aún hay espacio
-        if (mayores.Count < 3)
+        if (menores.Count < 3)
         {
-            mayores.Add(nodo.Puntaje);
+            menores.Add(nodo.Puntaje);
         }
 
         // Recorre el hijo izquierdo (valores más pequeños)
-        TopHighScoreRecursivo(nodo.hijoIzq, mayores);
+        TopHighScoreRecursivo(nodo.hijoDer, menores);
     }
 }

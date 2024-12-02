@@ -18,9 +18,16 @@ public class ResultsManager : MonoBehaviour
 
         // Mostrar los tres mejores puntajes
         string topScores = "Top 3:\n";
-        for (int i = 0; i < topTres.Count; i++)
+        for (int i = 0; i < 3; i++)
         {
-            topScores += (i + 1) + ". " + topTres[i] + "\n";
+            if (i < topTres.Count)
+            {
+                topScores += (i + 1) + ". " + topTres[i] + "\n";
+            }
+            else
+            {
+                topScores += (i + 1) + ". ---\n"; // Espacio vacío si no hay suficientes valores
+            }
         }
         topScoresText.text = topScores;
     }

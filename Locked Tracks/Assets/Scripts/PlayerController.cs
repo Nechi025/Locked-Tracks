@@ -15,7 +15,10 @@ public class PlayerController : MonoBehaviour
         {
             Move();
         }
-        
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    GameManager.instance.TerminarPartida();
+        //}
 
     }
 

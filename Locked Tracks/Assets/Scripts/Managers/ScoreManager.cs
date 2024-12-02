@@ -41,12 +41,13 @@ public class ScoreManager : MonoBehaviour
     public void GuardarHighscore(int puntaje)
     {
         int highscoreGuardado = PlayerPrefs.GetInt("Highscore", int.MaxValue);
-        if (puntaje < highscoreGuardado)
+        if (puntaje < highscoreGuardado) // Solo guarda si el puntaje es menor (mejor tiempo)
         {
             PlayerPrefs.SetInt("Highscore", puntaje);
             PlayerPrefs.Save();
         }
     }
+
 
     public int CargarHighscore()
     {
