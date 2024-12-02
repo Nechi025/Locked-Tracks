@@ -10,6 +10,11 @@ public class GrafoManager : MonoBehaviour
     public float distanciaConexion = 0.5f;
     public LayerMask capaBloques;
 
+    public Transform bloque1;
+    public Transform bloque2;
+    public Transform bloque3;
+    public Transform bloque4;
+
     private Dijkstra<Transform> dijkstra;
 
     public Material materialNormal; // Material para el estado normal
@@ -34,7 +39,9 @@ public class GrafoManager : MonoBehaviour
             grafo.AgregarVertice(bloque.transform);
         }
         ConectarVertices();
-
+        grafo.AgregarArista(bloque1, bloque2, 1); // Peso 1
+        grafo.AgregarArista(bloque2, bloque3, 1); // Peso 1
+        grafo.AgregarArista(bloque3, bloque4, 2); // Peso mayor
         dijkstra = new Dijkstra<Transform>();
     }
 
@@ -47,14 +54,6 @@ public class GrafoManager : MonoBehaviour
             {
                 DetectarBloque();
                 conectando = true;
-            }
-            foreach (var vertice in grafo.ObtenerVertices())
-            {
-                Debug.Log($"Bloque: {vertice}");
-                foreach (var (vecino, peso) in grafo.ObtenerAdyacentes(vertice))
-                {
-                    Debug.Log($" -> Conectado a: {vecino} con peso: {peso}");
-                }
             }
         }
         else if (Input.GetMouseButtonDown(1)) // Botón derecho para desconectar
@@ -157,6 +156,26 @@ public class GrafoManager : MonoBehaviour
                 }
             }
         }
+        /*Vector3[] direcciones = {
+        Vector3.forward, // Arriba
+        Vector3.back,    // Abajo
+        Vector3.right,   // Derecha
+        Vector3.left     // Izquierda
+    };
+
+        foreach (var bloque in FindObjectsOfType<BloqueInteractivo>()) // BloqueInteractivo representa los bloques
+        {
+            foreach (var direccion in direcciones)
+            {
+                if (Physics.Raycast(bloque.transform.position, direccion, out RaycastHit hit, distanciaConexion, capaBloques))
+                {
+                    var vecino = hit.transform;
+                    int distancia = CalcularPeso(bloque.transform.position, vecino.position);
+                    grafo.AgregarArista(bloque.transform, vecino, distancia);
+                    Debug.Log($"Se conectó {bloque.name} con {vecino.name} a una distancia de {distancia}");
+                }
+            }
+        }*/
     }
 
     // Crear una conexión entre los bloques seleccionados
