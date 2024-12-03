@@ -13,6 +13,7 @@ public class GrafoManager : MonoBehaviour
     private Dijkstra<Transform> dijkstra;
 
     public Material materialNormal; // Material para el estado normal
+    public Material materialSeleccionado; // Material para el estado normal
     public Material materialConectado; // Material para el estado conectado
 
     public CameraLook cl;
@@ -74,13 +75,19 @@ public class GrafoManager : MonoBehaviour
                     foreach (var bloque in ruta)
                     {
                         Debug.Log(bloque.name);
-                        ResaltarBloque(bloque);
+                        ResaltarBloque(bloque, materialConectado);
                         if (!caminoJugador.Contains(bloque))
                         {
                             caminoJugador.Add(bloque);
                         }
                     }
                     ResetSeleccion();
+
+                    var tren = FindObjectOfType<Tren>();
+                    if (tren != null)
+                    {
+                        tren.IniciarMovimiento(ruta);
+                    }
                 }
                 else
                 {
@@ -106,13 +113,20 @@ public class GrafoManager : MonoBehaviour
                 if (bloqueSeleccionado1 == null)
                 {
                     bloqueSeleccionado1 = bloque;
-                    ResaltarBloque(bloqueSeleccionado1);
+                    ResaltarBloque(bloqueSeleccionado1, materialSeleccionado);
                 }
                 else if (bloqueSeleccionado2 == null && bloque != bloqueSeleccionado1)
                 {
                     bloqueSeleccionado2 = bloque;
-                    ResaltarBloque(bloqueSeleccionado2);
+                    ResaltarBloque(bloqueSeleccionado2, materialSeleccionado);
                 }
+            }
+
+            var bloqueReset = hit.transform.GetComponent<BloqueReset>();
+
+            if (bloqueReset != null)
+            {
+                ResetearCamino();
             }
         }
     }
@@ -224,13 +238,13 @@ public class GrafoManager : MonoBehaviour
         return grafo.ObtenerAdyacentes(bloque).Count > 0;
     }
 
-    private void ResaltarBloque(Transform bloque)
+    private void ResaltarBloque(Transform bloque, Material material)
     {
         var renderer = bloque.GetComponent<Renderer>();
         if (renderer != null)
         {
-            materialNormal = renderer.material;
-            renderer.material = materialConectado;
+            //materialNormal = renderer.material;
+            renderer.material = material;
         }
     }
     private void RestablecerMaterial(Transform bloque)
@@ -240,5 +254,30 @@ public class GrafoManager : MonoBehaviour
         {
             renderer.material = materialNormal;
         }
+    }
+
+    public void ResetearCamino()
+    {
+        // Restablecer materiales a su estado original
+        foreach (var bloque in caminoJugador)
+        {
+            RestablecerMaterial(bloque);
+        }
+
+        // Limpiar la lista de bloques del camino del jugador
+        caminoJugador.Clear();
+
+        // También puedes resetear el cubo (tren) a su posición inicial si deseas
+        var tren = FindObjectOfType<Tren>();
+        if (tren != null)
+        {
+            tren.IniciarMovimiento(new List<Transform>()); // Pasar una lista vacía para detener el tren
+        }
+        tren.transform.position = tren.posicionInicial;
+
+        // Opcionalmente, si deseas resetear las selecciones de los bloques
+        ResetSeleccion();
+
+        Debug.Log("Camino reiniciado.");
     }
 }
