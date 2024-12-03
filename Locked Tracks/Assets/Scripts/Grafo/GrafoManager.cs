@@ -10,11 +10,6 @@ public class GrafoManager : MonoBehaviour
     public float distanciaConexion = 0.5f;
     public LayerMask capaBloques;
 
-    public Transform bloque1;
-    public Transform bloque2;
-    public Transform bloque3;
-    public Transform bloque4;
-
     private Dijkstra<Transform> dijkstra;
 
     public Material materialNormal; // Material para el estado normal
@@ -39,9 +34,6 @@ public class GrafoManager : MonoBehaviour
             grafo.AgregarVertice(bloque.transform);
         }
         ConectarVertices();
-        grafo.AgregarArista(bloque1, bloque2, 1); // Peso 1
-        grafo.AgregarArista(bloque2, bloque3, 1); // Peso 1
-        grafo.AgregarArista(bloque3, bloque4, 2); // Peso mayor
         dijkstra = new Dijkstra<Transform>();
     }
 
@@ -67,7 +59,7 @@ public class GrafoManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return)) // Presiona "Enter" para validar
         {
-            ValidarSolucion(caminoJugador);
+            ValidarSolucion();
         }
 
         if (Input.GetKeyDown(KeyCode.Space)) // Presionar espacio para calcular la ruta
@@ -83,6 +75,10 @@ public class GrafoManager : MonoBehaviour
                     {
                         Debug.Log(bloque.name);
                         ResaltarBloque(bloque);
+                        if (!caminoJugador.Contains(bloque))
+                        {
+                            caminoJugador.Add(bloque);
+                        }
                     }
                     ResetSeleccion();
                 }
@@ -92,21 +88,6 @@ public class GrafoManager : MonoBehaviour
                 }
             }
         }
-
-        // Si se seleccionaron dos bloques, conectarlos
-        /*if (bloqueSeleccionado1 != null && bloqueSeleccionado2 != null && conectando == true)
-        {
-            CrearConexion();
-            ResetSeleccion();
-            conectando = false;
-        }
-
-        if (bloqueSeleccionado1 != null && bloqueSeleccionado2 != null && desconectando == true)
-        {
-            DesconectarVertices(bloqueSeleccionado1, bloqueSeleccionado2);
-            ResetSeleccion();
-            desconectando = false;
-        }*/
     }
 
     // Detectar qué bloque seleccionó el jugador
@@ -150,42 +131,17 @@ public class GrafoManager : MonoBehaviour
                     int distancia = CalcularPeso(bloque.transform.position, vecino.transform.position);
                     if (distancia <= distanciaConexion)
                     {
+                        if (distancia < 1)
+                        {
+                            distancia = 1;
+                        }
+
                         grafo.AgregarArista(bloque.transform, vecino.transform, distancia);
                         Debug.Log("Se agrego arista");
                     }
                 }
             }
         }
-        /*Vector3[] direcciones = {
-        Vector3.forward, // Arriba
-        Vector3.back,    // Abajo
-        Vector3.right,   // Derecha
-        Vector3.left     // Izquierda
-    };
-
-        foreach (var bloque in FindObjectsOfType<BloqueInteractivo>()) // BloqueInteractivo representa los bloques
-        {
-            foreach (var direccion in direcciones)
-            {
-                if (Physics.Raycast(bloque.transform.position, direccion, out RaycastHit hit, distanciaConexion, capaBloques))
-                {
-                    var vecino = hit.transform;
-                    int distancia = CalcularPeso(bloque.transform.position, vecino.position);
-                    grafo.AgregarArista(bloque.transform, vecino, distancia);
-                    Debug.Log($"Se conectó {bloque.name} con {vecino.name} a una distancia de {distancia}");
-                }
-            }
-        }*/
-    }
-
-    // Crear una conexión entre los bloques seleccionados
-    private void CrearConexion()
-    {
-        int peso = CalcularPeso(bloqueSeleccionado1.position, bloqueSeleccionado2.position);
-
-        grafo.AgregarArista(bloqueSeleccionado1, bloqueSeleccionado2, peso);
-        Debug.Log($"Conexión creada entre {bloqueSeleccionado1.name} y {bloqueSeleccionado2.name} con peso {peso}");
-        RegistrarConexion(bloqueSeleccionado1, bloqueSeleccionado2);
     }
 
     // Calcular el peso de la conexión
@@ -200,47 +156,30 @@ public class GrafoManager : MonoBehaviour
         bloqueSeleccionado1 = null;
         bloqueSeleccionado2 = null;
     }
-    public void ValidarSolucion(List<Transform> caminoJugador)
+    public void ValidarSolucion()
     {
+        // Asegúrate de que la cantidad de bloques coincida
         if (caminoJugador.Count != claveDelPuzzle.Count)
         {
-            Debug.Log("La secuencia es incorrecta.");
+            Debug.Log("No resuelto: cantidad de bloques incorrecta.");
             return;
         }
 
+        // Compara bloque por bloque en el orden
         for (int i = 0; i < claveDelPuzzle.Count; i++)
         {
-            if (caminoJugador[i] != claveDelPuzzle[i])
+            if (caminoJugador[i] != claveDelPuzzle[i].transform)
             {
-                Debug.Log("La secuencia es incorrecta.");
+                Debug.Log($"No resuelto: diferencia en el bloque {i + 1}. Esperado: {claveDelPuzzle[i].name}, Jugador: {caminoJugador[i].name}");
                 return;
             }
         }
 
+        // Si pasa todas las comprobaciones, la solución es correcta
         Debug.Log("¡Puzzle resuelto!");
         cl.canMove = true;
         Cursor.lockState = CursorLockMode.None;
         GameManager.instance.TerminarPartida();
-    }
-
-    public void RegistrarConexion(Transform bloque1, Transform bloque2)
-    {
-        if (!caminoJugador.Contains(bloque1))
-        {
-            caminoJugador.Add(bloque1);
-            ResaltarBloque(bloque1);
-        }
-            
-
-        if (!caminoJugador.Contains(bloque2))
-        {
-            caminoJugador.Add(bloque2);
-            ResaltarBloque(bloque2);
-        }
-            
-
-        // Opcional: Dibujar línea o feedback visual
-        Debug.DrawLine(bloque1.position, bloque2.position, Color.green, 2f);
     }
 
     public void DesconectarVertices(Transform bloque1, Transform bloque2)
