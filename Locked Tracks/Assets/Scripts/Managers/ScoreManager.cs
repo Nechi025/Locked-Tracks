@@ -4,20 +4,26 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    private ABB arbolPuntajes;
+    public ABB arbolPuntajes;
 
     void Start()
     {
-        // Inicializar el árbol de puntajes
         arbolPuntajes = new ABB();
         arbolPuntajes.InicializarArbol();
 
-        // Cargar el highscore al iniciar
+        arbolPuntajes.TestArbol();
+
         int highscore = CargarHighscore();
-        if (highscore != int.MaxValue) // Si hay un highscore registrado
+        Debug.Log($"Highscore cargado al iniciar: {highscore}");
+
+        CargarTop3();
+
+        if (highscore != int.MaxValue)
         {
             arbolPuntajes.AgregarElem(highscore, FormatearTiempo(highscore));
         }
+
+        arbolPuntajes.ImprimirArbol();
     }
 
     public void RegistrarPuntaje(int puntaje, string tiempo)
@@ -27,6 +33,48 @@ public class ScoreManager : MonoBehaviour
 
         // Guardar el highscore si es necesario
         GuardarHighscore(puntaje);
+
+        // Guardar el Top 3 de puntajes en PlayerPrefs
+        GuardarTop3();
+
+        // Verificar el contenido del árbol para depuración
+        arbolPuntajes.ImprimirArbol();
+    }
+
+    public void GuardarTop3()
+    {
+        List<int> topTres = arbolPuntajes.TopHighScore();
+
+        for (int i = 0; i < topTres.Count; i++)
+        {
+            PlayerPrefs.SetInt("Top3_" + i, topTres[i]);
+        }
+
+        PlayerPrefs.Save();
+        Debug.Log("Top 3 guardado en PlayerPrefs.");
+    }
+
+    public void CargarTop3()
+    {
+        List<int> topTres = new List<int>();
+
+        for (int i = 0; i < 3; i++)
+        {
+            int puntaje = PlayerPrefs.GetInt("Top3_" + i, -1);  // -1 si no existe
+            if (puntaje != -1)
+            {
+                topTres.Add(puntaje);
+            }
+        }
+
+        // Si hay menos de tres puntajes, los completamos con -1
+        while (topTres.Count < 3)
+        {
+            topTres.Add(-1);
+        }
+
+        // Mostrar el Top 3 en el juego
+        Debug.Log("Top 3 cargado: " + string.Join(", ", topTres));
     }
 
     public int ObtenerHighscore()
@@ -40,18 +88,32 @@ public class ScoreManager : MonoBehaviour
 
     public void GuardarHighscore(int puntaje)
     {
+        // Cargar el highscore actual desde PlayerPrefs
         int highscoreGuardado = PlayerPrefs.GetInt("Highscore", int.MaxValue);
-        if (puntaje < highscoreGuardado) // Solo guarda si el puntaje es menor (mejor tiempo)
+
+        // Si el puntaje es mejor (menor), se guarda como nuevo highscore
+        if (puntaje < highscoreGuardado)
         {
             PlayerPrefs.SetInt("Highscore", puntaje);
             PlayerPrefs.Save();
+            Debug.Log("Nuevo highscore guardado: " + puntaje);
         }
+        else
+        {
+            Debug.Log("El puntaje no es mejor que el highscore actual, pero se guarda en el árbol.");
+        }
+
+        // Siempre agrega el puntaje al árbol binario
+        arbolPuntajes.AgregarElem(puntaje, FormatearTiempo(puntaje));
+        arbolPuntajes.ImprimirArbol();  // Depuración: Verificar el estado del árbol
     }
 
 
     public int CargarHighscore()
     {
-        return PlayerPrefs.GetInt("Highscore", int.MaxValue);
+        int highscore = PlayerPrefs.GetInt("Highscore", int.MaxValue);
+        Debug.Log("Highscore cargado: " + highscore);
+        return highscore;
     }
 
     public List<string> ObtenerTopHighScoreFormateado()
@@ -61,11 +123,15 @@ public class ScoreManager : MonoBehaviour
 
         foreach (int puntaje in topTres)
         {
-            topHighScoreFormateado.Add(FormatearTiempo(puntaje));
+            if (puntaje != -1) // Ignora los marcadores de valores vacíos
+            {
+                topHighScoreFormateado.Add(FormatearTiempo(puntaje));
+            }
         }
 
         return topHighScoreFormateado;
     }
+
 
     private string FormatearTiempo(int tiempoEnSegundos)
     {

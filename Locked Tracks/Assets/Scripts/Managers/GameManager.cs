@@ -28,18 +28,19 @@ public class GameManager : MonoBehaviour
     {
         tiempoInicio = Time.time; // Registra el inicio del tiempo de la partida
 
+        Debug.Log("GameManager Start ejecutándose.");
+
+        PlayerPrefs.SetInt("Prueba", 12345);
+        PlayerPrefs.Save();
+
+        int prueba = PlayerPrefs.GetInt("Prueba", -1);
+        Debug.Log("Valor de prueba guardado y recuperado: " + prueba);
+
         resultsPanel.SetActive(false);
+
     }
 
-    void Update()
-    {
-        /*
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TerminarPartida();
-            Debug.Log("Terminado");
-        }*/
-    }
+
     public int CalcularTiempoFinal()
     {
         float tiempoFinal = Time.time - tiempoInicio; // Tiempo transcurrido en segundos
@@ -51,21 +52,24 @@ public class GameManager : MonoBehaviour
         int tiempoFinal = CalcularTiempoFinal();
         string tiempoFormateado = FormatearTiempo(tiempoFinal);
 
-        // Registrar el tiempo como puntaje
         scoreManager.RegistrarPuntaje(tiempoFinal, tiempoFormateado);
 
-        // Obtener el highscore actualizado
         int highscore = scoreManager.ObtenerHighscore();
 
-        // Obtener los tres mejores puntajes
-        List<string> topTres = scoreManager.ObtenerTopHighScoreFormateado();
+        List<int> topTres = scoreManager.arbolPuntajes.TopHighScore(); 
 
-        // Mostrar resultados en el panel
+        List<string> topTresFormateado = new List<string>();
+        foreach (int puntaje in topTres)
+        {
+            topTresFormateado.Add(FormatearTiempo(puntaje));
+        }
+
         resultsPanel.SetActive(true);
-        resultsManager.MostrarResultados(tiempoFinal, highscore, topTres);
+        resultsManager.MostrarResultados(tiempoFinal, highscore, topTresFormateado);
 
-        // Detener el tiempo de juego
         Time.timeScale = 0;
+
+      
     }
 
     private string FormatearTiempo(int tiempoEnSegundos)
@@ -77,6 +81,7 @@ public class GameManager : MonoBehaviour
 
     public void ReiniciarJuego()
     {
-        Time.timeScale = 1; // Restaura el tiempo del juego
+        Time.timeScale = 1; 
     }
+
 }

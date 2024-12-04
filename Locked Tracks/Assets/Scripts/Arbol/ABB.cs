@@ -7,6 +7,10 @@ public class ABB : MonoBehaviour, ArbolTDA
 
     public NodoABB raiz;
 
+    private void Start()
+    {
+        TestArbol();
+    }
     public int Raiz()
     {
         return raiz.Puntaje;
@@ -37,6 +41,7 @@ public class ABB : MonoBehaviour, ArbolTDA
         if (raiz == null)
         {
             raiz = new NodoABB(puntaje, tiempo);
+            Debug.Log("Nuevo puntaje agregado como raíz: " + puntaje);
         }
         else
         {
@@ -57,8 +62,9 @@ public class ABB : MonoBehaviour, ArbolTDA
                 AgregarRecursivo(nodo.hijoIzq, puntaje, tiempo);
             }
         }
-        else if (puntaje > nodo.Puntaje)
+        else
         {
+            // Coloca valores iguales o mayores en el lado derecho
             if (nodo.hijoDer == null)
             {
                 nodo.hijoDer = new NodoABB(puntaje, tiempo);
@@ -137,28 +143,73 @@ public class ABB : MonoBehaviour, ArbolTDA
 
     public List<int> TopHighScore()
     {
-        List<int> menores = new List<int>();
-        TopHighScoreRecursivo(raiz, menores);
-        return menores;
+        List<int> mejores = new List<int>();
+        TopHighScoreRecursivo(raiz, mejores);
+
+        // Si hay menos de tres puntajes, agregamos -1 como marcador vacío
+        while (mejores.Count < 3)
+        {
+            mejores.Add(-1);  // Indicador de valor vacío
+        }
+
+        // Ordenar de menor a mayor (mejor tiempo está al principio)
+        mejores.Sort();
+
+        return mejores;
     }
 
-    private void TopHighScoreRecursivo(NodoABB nodo, List<int> menores)
+    private void TopHighScoreRecursivo(NodoABB nodo, List<int> mejores)
     {
-        if (nodo == null || menores.Count >= 3)
+        if (nodo == null || mejores.Count >= 3)
         {
             return;
         }
 
-        // Recorre primero el hijo derecho (mayores valores)
-        TopHighScoreRecursivo(nodo.hijoIzq, menores);
-
-        // Añade el valor actual si aún hay espacio
-        if (menores.Count < 3)
-        {
-            menores.Add(nodo.Puntaje);
-        }
-
         // Recorre el hijo izquierdo (valores más pequeños)
-        TopHighScoreRecursivo(nodo.hijoDer, menores);
+        TopHighScoreRecursivo(nodo.hijoIzq, mejores);
+
+        // Si el puntaje no está ya en la lista, lo agregamos
+        if (mejores.Count < 3 && !mejores.Contains(nodo.Puntaje))
+        {
+            mejores.Add(nodo.Puntaje);
+        }
+        
+        // Recorre el hijo derecho (valores más grandes)
+        TopHighScoreRecursivo(nodo.hijoDer, mejores);
+    }
+
+    public void ImprimirArbol()
+    {
+        ImprimirRecursivo(raiz);
+    }
+
+    private void ImprimirRecursivo(NodoABB nodo)
+    {
+        if (nodo == null) return;
+
+        ImprimirRecursivo(nodo.hijoIzq);
+        Debug.Log("Puntaje: " + nodo.Puntaje);
+        ImprimirRecursivo(nodo.hijoDer);
+    }
+
+    public void TestArbol()
+    {
+        ABB arbol = new ABB();
+        arbol.InicializarArbol();
+
+        // Añadir algunos puntajes de prueba
+        arbol.AgregarElem(30, "00:30");
+        arbol.AgregarElem(20, "00:20");
+        arbol.AgregarElem(40, "00:40");
+        arbol.AgregarElem(25, "00:25");
+        arbol.AgregarElem(35, "00:35");
+
+        // Ver la estructura del árbol
+        Debug.Log("Estructura del árbol:");
+        arbol.ImprimirArbol();
+
+        // Obtener el Top 3
+        List<int> top = arbol.TopHighScore();
+        Debug.Log("Top 3: " + string.Join(", ", top));
     }
 }

@@ -16,21 +16,15 @@ public class ResultsManager : MonoBehaviour
         currentScoreText.text = "Puntaje Final: " + FormatearTiempo(puntajeFinal);
         highscoreText.text = "Highscore: " + FormatearTiempo(highscore);
 
-        // Mostrar los tres mejores puntajes
         string topScores = "Top 3:\n";
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < topTres.Count; i++)
         {
-            if (i < topTres.Count)
-            {
-                topScores += (i + 1) + ". " + topTres[i] + "\n";
-            }
-            else
-            {
-                topScores += (i + 1) + ". ---\n"; // Espacio vacío si no hay suficientes valores
-            }
+            topScores += (i + 1) + ". " + topTres[i] + "\n";
         }
         topScoresText.text = topScores;
     }
+
+
     private string FormatearTiempo(int tiempoEnSegundos)
     {
         int minutos = tiempoEnSegundos / 60;
