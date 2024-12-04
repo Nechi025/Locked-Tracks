@@ -64,7 +64,7 @@ public class ABB : MonoBehaviour, ArbolTDA
         }
         else
         {
-            // Coloca valores iguales o mayores en el lado derecho
+            
             if (nodo.hijoDer == null)
             {
                 nodo.hijoDer = new NodoABB(puntaje, tiempo);
@@ -95,13 +95,13 @@ public class ABB : MonoBehaviour, ArbolTDA
         }
         else
         {
-            // Caso 1: El nodo no tiene hijos
+            
             if (nodo.hijoIzq == null && nodo.hijoDer == null)
             {
                 return null;
             }
 
-            // Caso 2: El nodo tiene un solo hijo
+            
             if (nodo.hijoIzq == null)
             {
                 return nodo.hijoDer;

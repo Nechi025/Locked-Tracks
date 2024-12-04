@@ -28,16 +28,13 @@ public class ScoreManager : MonoBehaviour
 
     public void RegistrarPuntaje(int puntaje, string tiempo)
     {
-        // Agregar el puntaje al árbol
+        
         arbolPuntajes.AgregarElem(puntaje, tiempo);
 
-        // Guardar el highscore si es necesario
         GuardarHighscore(puntaje);
 
-        // Guardar el Top 3 de puntajes en PlayerPrefs
         GuardarTop3();
 
-        // Verificar el contenido del árbol para depuración
         arbolPuntajes.ImprimirArbol();
     }
 
@@ -91,7 +88,6 @@ public class ScoreManager : MonoBehaviour
         // Cargar el highscore actual desde PlayerPrefs
         int highscoreGuardado = PlayerPrefs.GetInt("Highscore", int.MaxValue);
 
-        // Si el puntaje es mejor (menor), se guarda como nuevo highscore
         if (puntaje < highscoreGuardado)
         {
             PlayerPrefs.SetInt("Highscore", puntaje);
