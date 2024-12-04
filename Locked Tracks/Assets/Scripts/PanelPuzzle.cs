@@ -7,6 +7,7 @@ public class PanelPuzzle : MonoBehaviour, IInteractable
     public GameObject canvas;
     public CameraLook cl;
     public bool isInteracting = false;
+    public bool canClose = false;
 
 
     public void Interact()
@@ -18,12 +19,12 @@ public class PanelPuzzle : MonoBehaviour, IInteractable
             Cursor.lockState = CursorLockMode.None;
             isInteracting = true;
         }
-        /*else
+        else if (canClose == true)
         {
             canvas.SetActive(false);
             cl.canMove = true;
             Cursor.lockState = CursorLockMode.Locked;
             isInteracting = false;
-        }*/
+        }
     }
 }
