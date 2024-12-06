@@ -4,33 +4,29 @@ using UnityEngine;
 
 public class QuickSortSolver : MonoBehaviour
 {
-    // Public method to generate hints
     public List<string> GenerateHints(List<string> passwords)
     {
         List<string> sortedPasswords = new List<string>();
 
-        // Sort each password's digits and add to the list
         foreach (string password in passwords)
         {
             string sortedPassword = SortDigits(password);
             sortedPasswords.Add(sortedPassword);
         }
 
-        // Sort the entire list of sorted passwords
         QuickSort(sortedPasswords, 0, sortedPasswords.Count - 1);
 
         return sortedPasswords;
     }
 
-    // Helper to sort digits in a string
-    private string SortDigits(string input)
+    public string SortDigits(string input)
     {
         char[] digits = input.ToCharArray();
         QuickSort(digits, 0, digits.Length - 1);
         return new string(digits);
     }
 
-    // QuickSort for char arrays
+
     private void QuickSort(char[] array, int low, int high)
     {
         if (low < high)
@@ -66,7 +62,6 @@ public class QuickSortSolver : MonoBehaviour
         array[j] = temp;
     }
 
-    // QuickSort for List<string>
     private void QuickSort(List<string> list, int low, int high)
     {
         if (low < high)
