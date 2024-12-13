@@ -26,50 +26,45 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        tiempoInicio = Time.time; // Registra el inicio del tiempo de la partida
+        // Inicializar tiempo de inicio
+        tiempoInicio = Time.time;
 
-        Debug.Log("GameManager Start ejecutándose.");
-
-        PlayerPrefs.SetInt("Prueba", 12345);
-        PlayerPrefs.Save();
-
-        int prueba = PlayerPrefs.GetInt("Prueba", -1);
-        Debug.Log("Valor de prueba guardado y recuperado: " + prueba);
-
+        // Ocultar el panel de resultados al inicio
         resultsPanel.SetActive(false);
 
+        Debug.Log("GameManager iniciado correctamente.");
     }
-
 
     public int CalcularTiempoFinal()
     {
-        float tiempoFinal = Time.time - tiempoInicio; // Tiempo transcurrido en segundos
-        return Mathf.RoundToInt(tiempoFinal); // Devuelve un entero redondeado
+        // Calcular tiempo transcurrido desde el inicio
+        float tiempoFinal = Time.time - tiempoInicio;
+        return Mathf.RoundToInt(tiempoFinal);
     }
 
     public void TerminarPartida()
     {
+        // Calcular tiempo final y formatearlo
         int tiempoFinal = CalcularTiempoFinal();
         string tiempoFormateado = FormatearTiempo(tiempoFinal);
 
-        scoreManager.RegistrarPuntaje(tiempoFinal, tiempoFormateado);
+        // Registrar el puntaje en el sistema
+        scoreManager.RegistrarPuntaje(tiempoFinal);
 
-        int highscore = scoreManager.ObtenerHighscore();
+        // Obtener el highscore actualizado
+        int highscore = scoreManager.CargarHighscore();
 
-        List<int> topTres = scoreManager.arbolPuntajes.TopHighScore(); 
+        // Obtener el top 3 formateado
+        List<string> topTresFormateado = scoreManager.ObtenerTopHighScoreFormateado();
 
-        List<string> topTresFormateado = new List<string>();
-        foreach (int puntaje in topTres)
-        {
-            topTresFormateado.Add(FormatearTiempo(puntaje));
-        }
-
+        // Mostrar resultados en el panel
         resultsPanel.SetActive(true);
         resultsManager.MostrarResultados(tiempoFinal, highscore, topTresFormateado);
 
+        // Pausar el juego
         Time.timeScale = 0;
 
-      
+        Debug.Log("Partida terminada. Resultados mostrados.");
     }
 
     private string FormatearTiempo(int tiempoEnSegundos)
@@ -81,7 +76,8 @@ public class GameManager : MonoBehaviour
 
     public void ReiniciarJuego()
     {
-        Time.timeScale = 1; 
+        // Restablecer el tiempo del juego
+        Time.timeScale = 1;
+        Debug.Log("Juego reiniciado.");
     }
-
 }

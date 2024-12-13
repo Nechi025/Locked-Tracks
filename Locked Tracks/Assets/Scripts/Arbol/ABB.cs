@@ -51,6 +51,11 @@ public class ABB : MonoBehaviour, ArbolTDA
 
     private void AgregarRecursivo(NodoABB nodo, int puntaje, string tiempo)
     {
+        if (puntaje == nodo.Puntaje)
+        {
+            Debug.LogWarning("Puntaje duplicado ignorado: " + puntaje);
+            return;
+        }
         if (puntaje < nodo.Puntaje)
         {
             if (nodo.hijoIzq == null)
@@ -64,7 +69,6 @@ public class ABB : MonoBehaviour, ArbolTDA
         }
         else
         {
-            
             if (nodo.hijoDer == null)
             {
                 nodo.hijoDer = new NodoABB(puntaje, tiempo);
@@ -141,21 +145,46 @@ public class ABB : MonoBehaviour, ArbolTDA
         return Menor(nodo.hijoIzq);
     }
 
+    public void GuardarArbolEnPlayerPrefs()
+    {
+        List<int> puntajes = new List<int>();
+        RecorrerInOrder(raiz, puntajes, int.MaxValue); // Obtener todos los valores del árbol
+        string json = JsonUtility.ToJson(new Wrapper { scores = puntajes });
+        PlayerPrefs.SetString("ArbolPuntajes", json);
+        PlayerPrefs.Save();
+    }
+    public void CargarArbolDePlayerPrefs()
+    {
+        string json = PlayerPrefs.GetString("ArbolPuntajes", "[]");
+        List<int> puntajes = JsonUtility.FromJson<Wrapper>(json)?.scores ?? new List<int>();
+        foreach (int puntaje in puntajes)
+        {
+            AgregarElem(puntaje, FormatearTiempo(puntaje)); // Usa tu lógica existente
+        }
+    }
     public List<int> TopHighScore()
     {
         List<int> mejores = new List<int>();
-        TopHighScoreRecursivo(raiz, mejores);
+        RecorrerInOrder(raiz, mejores, 3); // Recolecta los tres menores
+        return mejores;
+    }
 
-        // Si hay menos de tres puntajes, agregamos -1 como marcador vacío
-        while (mejores.Count < 3)
+    private void RecorrerInOrder(NodoABB nodo, List<int> lista, int limite)
+    {
+        if (nodo == null || lista.Count >= limite)
+            return;
+
+        // Recorremos primero los hijos izquierdos (valores menores)
+        RecorrerInOrder(nodo.hijoIzq, lista, limite);
+
+        // Agregamos el valor actual si no hemos alcanzado el límite
+        if (lista.Count < limite)
         {
-            mejores.Add(-1);  // Indicador de valor vacío
+            lista.Add(nodo.Puntaje);
         }
 
-        // Ordenar de menor a mayor (mejor tiempo está al principio)
-        mejores.Sort();
-
-        return mejores;
+        // Luego recorremos los hijos derechos
+        RecorrerInOrder(nodo.hijoDer, lista, limite);
     }
 
     private void TopHighScoreRecursivo(NodoABB nodo, List<int> mejores)
@@ -169,13 +198,26 @@ public class ABB : MonoBehaviour, ArbolTDA
         TopHighScoreRecursivo(nodo.hijoIzq, mejores);
 
         // Si el puntaje no está ya en la lista, lo agregamos
-        if (mejores.Count < 3 && !mejores.Contains(nodo.Puntaje))
+        if (mejores.Count < 3 && !mejores.Contains(nodo.Puntaje)) 
         {
             mejores.Add(nodo.Puntaje);
         }
         
         // Recorre el hijo derecho (valores más grandes)
         TopHighScoreRecursivo(nodo.hijoDer, mejores);
+    }
+
+    public bool Existe(int puntaje)
+    {
+        return ExisteRecursivo(raiz, puntaje);
+    }
+
+    private bool ExisteRecursivo(NodoABB nodo, int puntaje)
+    {
+        if (nodo == null) return false;
+        if (nodo.Puntaje == puntaje) return true;
+        if (puntaje < nodo.Puntaje) return ExisteRecursivo(nodo.hijoIzq, puntaje);
+        return ExisteRecursivo(nodo.hijoDer, puntaje);
     }
 
     public void ImprimirArbol()
@@ -212,4 +254,18 @@ public class ABB : MonoBehaviour, ArbolTDA
         List<int> top = arbol.TopHighScore();
         Debug.Log("Top 3: " + string.Join(", ", top));
     }
+
+    private string FormatearTiempo(int tiempoEnSegundos)
+    {
+        int minutos = tiempoEnSegundos / 60;
+        int segundos = tiempoEnSegundos % 60;
+        return string.Format("{0:D2}:{1:D2}", minutos, segundos);
+    }
+
+    [System.Serializable]
+    private class Wrapper
+    {
+        public List<int> scores;
+    }
+
 }
