@@ -11,20 +11,40 @@ public class Interactor : MonoBehaviour
 {
     public Transform interactorSource;
     public float interactRange;
+    public TMPro.TextMeshProUGUI interactText;
 
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+
+        Ray r = new Ray(interactorSource.position, interactorSource.forward);
+        if (Physics.Raycast(r, out RaycastHit hitinfo, interactRange))
         {
-            Ray r = new Ray(interactorSource.position, interactorSource.forward);
-            if (Physics.Raycast(r, out RaycastHit hitinfo, interactRange))
+
+            if (hitinfo.collider.gameObject.CompareTag("Panel"))
             {
-                if (hitinfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
+                hitinfo.collider.gameObject.TryGetComponent(out PanelPuzzle panelPuzzle);
+
+                if (!panelPuzzle.isInteracting)
                 {
-                    interactObj.Interact();
+                    interactText.gameObject.SetActive(true);
+                }
+                
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    if (hitinfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
+                    {
+                        interactObj.Interact();
+                        interactText.gameObject.SetActive(false);
+                    }
                 }
             }
+
+            
         }
+        else interactText.gameObject.SetActive(false);
+
+
     }
 }

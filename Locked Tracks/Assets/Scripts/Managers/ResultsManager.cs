@@ -29,7 +29,7 @@ public class ResultsManager : MonoBehaviour
     {
         int minutos = tiempoEnSegundos / 60;
         int segundos = tiempoEnSegundos % 60;
-        return string.Format("{0:D2}:{1:D2}", minutos, segundos);
+        return string.Format("{0:00}:{1:00}", minutos, segundos);
     }
 
 }

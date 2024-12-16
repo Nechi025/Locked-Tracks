@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public ScoreManager scoreManager;
-    public GameObject resultsPanel; // Panel de resultados
-    public ResultsManager resultsManager;
+    private ScoreManager scoreManager;
+    private GameObject resultsPanel; // Panel de resultados
+    private ResultsManager resultsManager;
 
     private float tiempoInicio;
+
+    public float remainingTime;
 
     public static GameManager instance { get; private set; }
 
@@ -21,16 +23,28 @@ public class GameManager : MonoBehaviour
         else
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        UpdateSceneReferences();
+    }
+
+    private void UpdateSceneReferences()
+    {
+        scoreManager = FindObjectOfType<ScoreManager>();
+
+        resultsManager = FindObjectOfType<ResultsManager>();
+
+        resultsPanel = GameObject.Find("ResultPanel");
     }
 
     void Start()
     {
         // Inicializar tiempo de inicio
         tiempoInicio = Time.time;
-
-        // Ocultar el panel de resultados al inicio
-        resultsPanel.SetActive(false);
 
         Debug.Log("GameManager iniciado correctamente.");
     }
@@ -58,7 +72,7 @@ public class GameManager : MonoBehaviour
         List<string> topTresFormateado = scoreManager.ObtenerTopHighScoreFormateado();
 
         // Mostrar resultados en el panel
-        resultsPanel.SetActive(true);
+        resultsPanel.GetComponent<Canvas>().enabled = true;
         resultsManager.MostrarResultados(tiempoFinal, highscore, topTresFormateado);
 
         // Pausar el juego
