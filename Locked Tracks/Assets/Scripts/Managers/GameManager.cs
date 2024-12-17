@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        //ResetPlayerPrefs
         if (instance != null && instance != this)
         {
             Destroy(this);
@@ -52,8 +53,9 @@ public class GameManager : MonoBehaviour
     public int CalcularTiempoFinal()
     {
         // Calcular tiempo transcurrido desde el inicio
-        float tiempoFinal = Time.time - tiempoInicio;
+        float tiempoFinal = Time.unscaledTime - tiempoInicio;
         return Mathf.RoundToInt(tiempoFinal);
+
     }
 
     public void TerminarPartida()
@@ -94,4 +96,10 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         Debug.Log("Juego reiniciado.");
     }
+    //void ResetPlayerPrefs()
+    //{
+    //    PlayerPrefs.DeleteAll();
+    //    PlayerPrefs.Save(); // Asegura que los cambios se guarden inmediatamente.
+    //    Debug.Log("PlayerPrefs han sido reseteados.");
+    //}
 }
