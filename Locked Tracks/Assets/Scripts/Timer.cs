@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class Timer : MonoBehaviour
 {
     [SerializeField] Text timerText;
+    [SerializeField] bool bomb = false;
+    [SerializeField] float timeBomb = 0;
 
     private void Start()
     {
@@ -17,19 +19,40 @@ public class Timer : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.remainingTime > 0)
+        if (!bomb)
         {
-            GameManager.instance.remainingTime -= Time.deltaTime;
-        }
-        else
-        {
-            GameManager.instance.remainingTime = 0;
-            Cursor.lockState = CursorLockMode.None;
-            ChangeScene.instance.LoadSceneByName("Lose");
+            if (GameManager.instance.remainingTime > 0)
+            {
+                GameManager.instance.remainingTime -= Time.deltaTime;
+            }
+            else
+            {
+                GameManager.instance.remainingTime = 0;
+                Cursor.lockState = CursorLockMode.None;
+                ChangeScene.instance.LoadSceneByName("Lose");
+            }
+
+            int minutes = Mathf.FloorToInt(GameManager.instance.remainingTime / 60);
+            int seconds = Mathf.FloorToInt(GameManager.instance.remainingTime % 60);
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
 
-        int minutes = Mathf.FloorToInt(GameManager.instance.remainingTime / 60);
-        int seconds = Mathf.FloorToInt(GameManager.instance.remainingTime % 60);
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        else if (bomb)
+        {
+            if (timeBomb > 0)
+            {
+                timeBomb -= Time.deltaTime;
+            }
+            else
+            {
+                timeBomb = 0;
+            }
+
+            int minutes = Mathf.FloorToInt(timeBomb / 60);
+            int seconds = Mathf.FloorToInt(timeBomb % 60);
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+
+        
     }
 }
