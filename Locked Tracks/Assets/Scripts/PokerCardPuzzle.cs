@@ -31,6 +31,8 @@ public class PokerCardPuzzle : MonoBehaviour
     [SerializeField] private Text feedbackText; // Feedback for guesses
     [SerializeField] private GameObject puzzleGameObject; // GameObject to disable on completion
 
+    [SerializeField] private CameraLook cl;
+
     private List<GameObject> answerLineClones = new List<GameObject>(); // Clones in the answer line
     private List<PokerCard> hiddenCards = new List<PokerCard>(); // Hidden cards
 
@@ -90,6 +92,8 @@ public class PokerCardPuzzle : MonoBehaviour
         if (puzzleGameObject != null)
         {
             puzzleGameObject.SetActive(false); // Disable the puzzle GameObject
+            cl.canMove = true;
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 

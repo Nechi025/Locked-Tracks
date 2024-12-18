@@ -2310,9 +2310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce07890e477f1be4faac3537fa3979be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreManager: {fileID: 0}
-  resultsPanel: {fileID: 0}
-  resultsManager: {fileID: 0}
+  remainingTime: 600
 --- !u!4 &2106872188
 Transform:
   m_ObjectHideFlags: 0

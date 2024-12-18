@@ -28,6 +28,7 @@ public class Interactor : MonoBehaviour
                 if (!panelPuzzle.isInteracting)
                 {
                     interactText.gameObject.SetActive(true);
+                    interactText.text = "Press E to interact";
                 }
                 
 

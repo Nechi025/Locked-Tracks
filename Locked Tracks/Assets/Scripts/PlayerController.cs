@@ -31,4 +31,12 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(move * speed * Time.deltaTime);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("GameOver"))
+        {
+            GameManager.instance.TerminarPartida();
+        }
+    }
 }

@@ -24,6 +24,10 @@ public class GrafoManager : MonoBehaviour
     private bool conectando = false;
     private bool desconectando = false;
 
+    public GameObject puzzleDoor;
+
+    private bool isSolved = false;
+
     void Start()
     {
         grafo = new Grafo();
@@ -40,31 +44,26 @@ public class GrafoManager : MonoBehaviour
 
     void Update()
     {
-        // Detectar clic del jugador
-        if (Input.GetMouseButtonDown(0))
+        if (!isSolved)
         {
-            if (!desconectando)
+            // Detectar clic del jugador
+            if (Input.GetMouseButtonDown(0))
             {
-                DetectarBloque();
-                conectando = true;
+                if (!desconectando)
+                {
+                    DetectarBloque();
+                    conectando = true;
+                }
             }
-        }
-        else if (Input.GetMouseButtonDown(1)) // Botón derecho para desconectar
-        {
-            if (!conectando)
+            else if (Input.GetMouseButtonDown(1)) // Botón derecho para desconectar
             {
-                DetectarBloque();
-                desconectando = true;
+                if (!conectando)
+                {
+                    DetectarBloque();
+                    desconectando = true;
+                }
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.Return)) // Presiona "Enter" para validar
-        {
-            ValidarSolucion();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space)) // Presionar espacio para calcular la ruta
-        {
             if (bloqueSeleccionado1 != null && bloqueSeleccionado2 != null)
             {
                 List<Transform> ruta = dijkstra.CalcularRuta(grafo, bloqueSeleccionado1, bloqueSeleccionado2);
@@ -94,7 +93,7 @@ public class GrafoManager : MonoBehaviour
                     Debug.LogWarning("No se encontró una ruta.");
                 }
             }
-        }
+        }   
     }
 
     // Detectar qué bloque seleccionó el jugador
@@ -127,6 +126,13 @@ public class GrafoManager : MonoBehaviour
             if (bloqueReset != null)
             {
                 ResetearCamino();
+            }
+
+            var bloqueEnter = hit.transform.GetComponent<BloqueEnter>();
+
+            if (bloqueEnter != null)
+            {
+                ValidarSolucion();
             }
         }
     }
@@ -191,9 +197,8 @@ public class GrafoManager : MonoBehaviour
 
         // Si pasa todas las comprobaciones, la solución es correcta
         Debug.Log("¡Puzzle resuelto!");
-        cl.canMove = true;
-        Cursor.lockState = CursorLockMode.None;
-        GameManager.instance.TerminarPartida();
+        isSolved = true;
+        puzzleDoor.SetActive(false);
     }
 
     public void DesconectarVertices(Transform bloque1, Transform bloque2)
